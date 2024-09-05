@@ -1,0 +1,145 @@
+---
+title: "HW2"
+format: html
+editor: visual
+---
+
+## Task 1:
+
+Making a vector for the 20 pre-treatment BP values
+
+```{r}
+pre <- c(120, 151, 125, 126, 115, 132, 132, 129, 134, 139, 127, 122, 127, 135, 133, 128, 147, 138, 140, 132) 
+pre
+```
+
+Making a vector for the 20 post-treatment BP values
+
+```{r}
+post <- c(127, 145, 135, 122, 115, 122, 123, 126, 126, 129, 132, 146, 120, 114, 121, 120, 128, 120, 133, 115)
+post
+```
+
+Creating list names for subjects
+
+```{r}
+names(pre) <- paste("Subject", 1:20, sep = "_") 
+pre
+
+names(post) <- paste("Subject", 1:20, sep = "_") 
+post
+```
+
+Creating vector for the difference between pre and post BP
+
+```{r}
+diff_bp <- pre - post
+diff_bp
+```
+
+Calculating mean difference in BP
+
+```{r}
+mean_bp <- mean(diff)
+mean_bp
+```
+
+Determining which patients had a decrease in BP from pre to post conditions using the which() function
+
+```{r}
+which(diff_bp>0)
+```
+
+Using a Boolean as an indexing vector to return only variables in diff_bp that had a positive change
+
+```{r}
+positive_change <- c(diff_bp>0)
+diff_bp[positive_change]
+```
+
+Calculating the mean decrease in BP for patients with a positive change in bp
+
+```{r}
+PC_mean <- mean(diff_bp[positive_change]) 
+PC_mean
+```
+
+## Task 2:
+
+Creating a data frame for patient, pre_bp, post_bp, and diff_bp
+
+```{r}
+patient <- 1:20
+pre_bp <- c(pre)
+post_bp <- c(post)
+
+
+bp_df <- data.frame(patient, pre_bp, post_bp, diff_bp)
+bp_df
+```
+
+Return bp_df rows where the diff_bp is negative
+
+```{r}
+neg_bp_df <- bp_df[bp_df$diff_bp < 0,]
+neg_bp_df
+```
+
+Create new column in data frame corresponding to TRUE if the post_bp is less than 120 and FALSE if it is not.
+
+```{r}
+
+bp_df$post_120 <- c(post_bp < 120)
+bp_df
+```
+
+Print of data frame
+
+```{r}
+knitr::kable(bp_df)
+```
+
+## Task 3:
+
+Creating a data frame for pre-treatment and post-treatment placebo for subjects 1-10 including a new column for TRUE/FALSE
+
+```{r}
+pre_placebo <- c(138, 135, 147, 117, 152, 134, 114, 121, 131, 130)
+post_placebo <- c(105, 136, 123, 130, 134, 143, 135, 139, 120, 124)
+placebo_df <- data.frame("Patient" = c(1:10),
+                        "pre_placebo" =  c(138, 135, 147, 117, 152, 134, 114, 121, 131, 130), 
+                        "post_placebo" = c(105, 136, 123, 130, 134, 143, 135, 139, 120, 124))
+                        
+placebo_df$placebo_120 <- c(post_placebo < 120)
+placebo_df$placebo_diff <- c(pre_placebo - post_placebo)
+placebo_df
+```
+
+Creating list that combines the treatment and placebo data frames
+
+```{r}
+bp_list <- list(placebo = placebo_df, treatment = bp_df)
+bp_list
+```
+
+Checking the list was properly made by looking at the structure and attributes
+
+```{r}
+str(bp_list)
+attributes(bp_list)
+```
+
+Accessing element one in the list with 3 different types of syntax
+
+```{r}
+bp_list[1]
+bp_list[[1]]
+bp_list$placebo
+
+```
+
+Using bp_list to access the pre_bp column in the placebo data frame
+
+```{r}
+bp_list[["placebo"]]$pre_placebo
+```
